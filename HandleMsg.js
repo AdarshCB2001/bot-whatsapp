@@ -120,7 +120,7 @@ const HandleMsg = async (message, browser, client = new Client()) => {
             join: '💣 Failure! It appears that a bot has been removed from that group. The bot will not be able to rejoin, please be aware.'
         },
  success: {
-            join: '✅ Berhasil join group via link!',
+            join: '✅ Successfully joined the group using the link!',
             sticker: 'Here\'s your sticker 🎉',
             greeting: `Konnichiwa Minna 👋 I am your favourite Waifu Akeno-san` +
                 `To see the available commands or menus on the bot, send *${prefix}menu*. But understand the terms and condition before using *${prefix}tnc*`
