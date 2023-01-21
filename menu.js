@@ -42,7 +42,7 @@ const textMenu = (pushname, t, prefix) => {
     let m = (namaMenu) => `*${prefix}${namaMenu}*`
     let n = (new Date(t * 1000)).getHours()
     let ucapan = ''
-    if (3 < n && n <= 9) ucapan = `*Ohayō gozaimasu minna🌤️*`
+    if (3 < n && n <= 9) ucapan = `*Ohayō gozaimasu🌤️*`
     else if (9 < n && n <= 14) ucapan = `*Konnichiwa ☀️*`
     else if (14 < n && n <= 18) ucapan = `*Konbanwa🌻*`
     else ucapan = `*Oyasumi Nasai~ 💤*`
@@ -50,10 +50,7 @@ const textMenu = (pushname, t, prefix) => {
 Hello, ${pushname}!
 ${ucapan} 👋️
 | Introduction |
-${q3} ___              ___      _   
-/ __| ___ _ _ ___| _ ) ___| |_ 
-\\__ \\/ -_) '_/ _ \\ _ \\/ _ \\  _|
-|___/\\___|_| \\___/___/\\___/\\__|${q3}
+${q3} ┈━═☆Yᵒᵘ Oᶰˡʸ Lᶤᵛᵉ Oᶰᶜᵉ☆━═┈ ${q3}
 
 Konnichiwa minna~ Watashiwa Akeno-san desu. Watashino goshujin wa TheABCguy desu! This are some of my features✨
 ${readMore}
@@ -371,8 +368,13 @@ Dimohon untuk tidak menghapus link github saya, butuh support dari kalian! makas
 
 const textDonasi = () => {
     return `
-Hi, thanks for using this bot, to support this bot you can help by donating by:
+Hi, thanks for using this bot, Follow and support my social media :
+Instagram : https://www.instagram.com/the.abc.guy/
+Youtube : https://www.youtube.com/channel/UC8_Lb5ngyl3cPuxwxTl5GpA
+LinkedIn : https://www.linkedin.com/in/adarsh-chanabhat-927370194/
 
+To develop this bot you can help by donating to:
+Name : Adarsh Chanabhat
 Gpay: achanabhat8@okaxis
 Amazon Pay: 7040567094@apl
 
