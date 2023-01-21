@@ -153,7 +153,7 @@ Calculator operations use prefix (=)
 
 ╔══✪〘 🎊 Random 🎊 〙✪
 ║ Random means random.
-╠> ${m('word of wisdom')}
+╠> ${m('wordsofwisdom')}
 ╠> ${m('thesis')}
 ╠> ${m('poem')}
 ╠> ${m('fact')}
