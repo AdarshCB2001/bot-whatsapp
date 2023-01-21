@@ -291,7 +291,7 @@ const HandleMsg = async (message, browser, client = new Client()) => {
 
         const audioConverter = async (complexFilter, filterName) => {
             let durs = quotedMsg ? quotedMsg.duration : message.duration
-            reply(resMsg.wait + `\nEstimasi ± ${(+durs / 100).toFixed(0)} menit.`)
+            reply(resMsg.wait + `\nEstimated ± ${(+durs / 100).toFixed(0)} menit.`)
             const _inp = await decryptMedia(quotedMsg)
             let inpath = `./media/in_${filterName}_${t}.mp3`
             let outpath = `./media/out_${filterName}_${t}.mp3`
@@ -930,7 +930,7 @@ const HandleMsg = async (message, browser, client = new Client()) => {
                 case 'qrcode': {
                     if (args.length == 0) return reply(`To create a QR code, type ${prefix}qrcode <word>\nExample: ${prefix}qrcode Akeno is Better than Rias`)
                     reply(resMsg.wait)
-                    await client.sendFileFromUrl(from, `http://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(arg)}&size=500x500`, '', '', id)
+                    await client.sendFileFromUrl(from, `http(s)://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(arg)}&size=500x500`, '', '', id)
                     break
                 }
 
@@ -1062,7 +1062,7 @@ const HandleMsg = async (message, browser, client = new Client()) => {
                     break
                 case 'trans':
                 case 'translate': {
-                    return reply('Feature disabled')
+                    return reply('Feature coming soon')
                     // if (args.length === 0 && !isQuotedChat) return reply(`Translate text ke kode bahasa, penggunaan: \n${prefix}trans <kode bahasa> <text>\nContoh : \n -> ${prefix}trans id some english or other language text here\n -> ${prefix}translate en beberapa kata bahasa indonesia atau bahasa lain. \n\nUntuk kode bahasa cek disini : https://anotepad.com/note/read/7fd833h4`)
                     // const lang = ['en', 'pt', 'af', 'sq', 'am', 'ar', 'hy', 'az', 'eu',
                     //     'be', 'bn', 'bs', 'bg', 'ca', 'ceb', 'ny', 'zh-CN', 'co', 'hr', 'cs',
@@ -1305,7 +1305,7 @@ const HandleMsg = async (message, browser, client = new Client()) => {
             switch (command) {
                 /* #region Maker */
                 case 'attp': {
-                    if (args.length == 0) return reply(`Animated text to picture. Contoh ${prefix}attp Akeno better than Rias`)
+                    if (args.length == 0) return reply(`Animated text to picture. Example ${prefix}attp Akeno better than Rias`)
                     reply(resMsg.wait)
                     let txt = isQuotedChat ? quotedMsg.body : arg
                     sendSFU(`https://api.xteam.xyz/attp?file&text=${txt}`, false)
@@ -1315,7 +1315,7 @@ const HandleMsg = async (message, browser, client = new Client()) => {
                 case 'ttp':
                 case 'ttpc': {
                     if (args.length == 0) return reply(
-                        `Text to picture. Contoh:\n` +
+                        `Text to picture. Example:\n` +
                         `${prefix}ttp Akeno better than Rias\n` +
                         `${prefix}ttpc red hello (red colour)\n` +
                         `${prefix}ttpc red+blue Hello (red colour stroke blue)\n` +
@@ -1702,41 +1702,48 @@ const HandleMsg = async (message, browser, client = new Client()) => {
 
             switch (command) {
                 /* #region Random Kata */
-                case 'fakta':
-                    fetch('https://raw.githubusercontent.com/ArugaZ/scraper-results/main/random/faktaunix.txt')
-                        .then(res => res.text())
-                        .then(faktaBody => {
-                            let splitnix = faktaBody.split('\n')
-                            let randomnix = sample(splitnix)
-                            reply(randomnix)
+                case 'fact':
+			const request = require('request');
+
+			var limit = 3
+			request.get({
+  			url: 'https://api.api-ninjas.com/v1/facts?limit=' + 1,
+ 			headers: {
+    			'X-Api-Key': 'Zc9HJqx54aPaHEmZezErww==GzynfulaPcAxOgu8'
+  		       },
+		     }, function(error, response, body) {
+  			if(error) return console.error('Request failed:', error)
+  			else if(response.statusCode != 200) return console.error('Error:', response.statusCode, body.toString('utf8'))
+ 			 else console.log(body)
+		       })
                         })
                         .catch(e => { return printError(e) })
                     break
-                case 'katabijak':
-                    fetch('https://raw.githubusercontent.com/ArugaZ/scraper-results/main/random/katabijax.txt')
-                        .then(res => res.text())
-                        .then(kataBody => {
-                            let splitbijak = kataBody.split('\n')
-                            let randombijak = sample(splitbijak)
-                            reply(randombijak)
-                        })
-                        .catch(e => { return printError(e) })
+                case 'jokes':
+			const request = require('request');
+
+			var limit = 3
+			request.get({
+			  url: 'https://api.api-ninjas.com/v1/jokes?limit=' + 1,
+			  headers: {
+			    'X-Api-Key': 'Zc9HJqx54aPaHEmZezErww==GzynfulaPcAxOgu8'
+			  },
+			}, function(error, response, body) {
+			  if(error) return console.error('Request failed:', error)
+			  else if(response.statusCode != 200) return console.error('Error:', response.statusCode, body.toString('utf8'))
+			  else console.log(body)
+			});
                     break
-                case 'pantun':
-                    fetch('https://raw.githubusercontent.com/ArugaZ/scraper-results/main/random/pantun.txt')
-                        .then(res => res.text())
-                        .then(pantunBody => {
-                            let splitpantun = pantunBody.split('\n')
-                            let randompantun = sample(splitpantun)
-                            reply(' ' + randompantun.replace(/aruga-line/g, "\n"))
+                case 'trivia':
+                    fetch('https://opentdb.com/api.php?amount=1&category=31&difficulty=medium')
                         })
                         .catch(e => { return printError(e) })
                     break
                 case 'quote':
                 case 'quotes': {
-                    const quotex = await api.quote()
-                        .catch(e => { return printError(e) })
-                    await reply(quotex)
+			fetch("https://animechan.vercel.app/api/random")
+				  .then((response) => response.json())
+				  .then((quote) => console.log(quote))
                         .catch(e => { return printError(e) })
                     break
                 }
@@ -1745,16 +1752,23 @@ const HandleMsg = async (message, browser, client = new Client()) => {
 
             switch (command) {
                 /* #region Random Images */
-                case 'anime': {
-                    if (args.length == 0) return reply(`To use ${prefix}anime\nPlease type: ${prefix}anime [query]\nExample: ${prefix}anime random\n\nQuery available:\n random, waifu, husbu, neko`)
-                    if (args[0] == 'random' || args[0] == 'waifu' || args[0] == 'husbu' || args[0] == 'neko') {
-                        fetch('https://raw.githubusercontent.com/ArugaZ/scraper-results/main/random/anime/' + args[0] + '.txt')
-                            .then(res => res.text())
-                            .then(animeBody => {
-                                let randomnime = animeBody.split('\n')
-                                let randomnimex = sample(randomnime)
-                                client.sendFileFromUrl(from, randomnimex, '', 'Nih...', id)
-                            })
+                case 'animepfp': {
+			const axios = require("axios")
+
+			const options = {
+			  method: 'GET',
+			  url: 'https://any-anime.p.rapidapi.com/anime/img',
+			  headers: {
+			    'X-RapidAPI-Key': '1f06844717mshfb3da7a73b36092p1c1582jsn8ac93f826e42',
+			    'X-RapidAPI-Host': 'any-anime.p.rapidapi.com'
+			  }
+			}
+
+			axios.request(options).then(function (response) {
+				console.log(response.data);
+			}).catch(function (error) {
+				console.error(error)
+			})
                             .catch(e => { return printError(e) })
                     } else {
                         reply(`Ara Ara the query is not available. Please type ${prefix}anime to see the query list`)
@@ -1764,8 +1778,7 @@ const HandleMsg = async (message, browser, client = new Client()) => {
 
                 case 'memes':
                 case 'meme': {
-                    const randmeme = await api.sreddit()
-                    client.sendFileFromUrl(from, randmeme.url, '', randmeme.title, id)
+                    fetch("https://meme-api.com/gimme")
                         .catch(e => { return printError(e) })
                     break
                 }
@@ -1774,16 +1787,6 @@ const HandleMsg = async (message, browser, client = new Client()) => {
 
             switch (command) {
                 /* #region Search Any */
-                case 'kbbi': {
-                    if (args.length != 1) return reply(`Look up the meaning of words in KBBI\nUsage: ${prefix}kbbi <word>\n example: ${prefix}kbbi apel`)
-                    scraper.kbbi(args[0])
-                        .then(res => {
-                            if (res == '') return reply(`Ara Ara, the word "${args[0]}" is not available in KBBI`)
-                            reply(res + `\n\nMore: https://kbbi.web.id/${args[0]}`)
-
-                        }).catch(e => { return printError(e) })
-                    break
-                }
                 case 'ytsearch':
                 case 'yt': {
                     if (args.length == 0) {
@@ -1866,19 +1869,19 @@ const HandleMsg = async (message, browser, client = new Client()) => {
                 case 'reddit':
                 case 'subreddit':
                 case 'sreddit': {
-                    if (args.length == 0) return reply(`Untuk mencari gambar dari sub reddit\nketik: ${prefix}sreddit [search]\ncontoh: ${prefix}sreddit naruto`)
+                    if (args.length == 0) return reply(`To find pictures from sub reddit\n type: ${prefix}sreddit [search]\n Example: ${prefix}sreddit naruto`)
                     const hasilreddit = await api.sreddit(arg)
-                    if (hasilreddit.nsfw === true) return reply(`Hayo mau cari apa? Tobat lah bro masih ajee hadehh kagak modal lagi.`)
+                    if (hasilreddit.nsfw === true) return reply(`Ara Ara....Kono Hentai~`)
                     await client.sendFileFromUrl(from, hasilreddit.url, '', hasilreddit.title, id)
                         .catch(e => { return printError(e) })
                     break
                 }
-                case 'lirik':
-                case 'lyric': {
-                    if (args.length === 0) return reply(`Untuk mencari lirik dengan nama lagu atau potongan lirik\nketik: ${prefix}lirik <query>\nContoh: ${prefix}lirik lathi`)
+                case 'lyric':
+                case 'lyrics': {
+                    if (args.length === 0) return reply(`To find lyrics by song name or cut lyrics\ntype: ${prefix}lyrics <query>\nexample: ${prefix}lirik unravel`)
                     let res = await api.lyric(arg).catch(e => { return printError(e, true, false) })
                     if (res) reply(res)
-                    else reply(`Error! Lirik tidak ditemukan.`)
+                    else reply(`Error! Lyrics not found`)
                     break
                 }
                 /* #endregion End of search any */
@@ -1886,17 +1889,7 @@ const HandleMsg = async (message, browser, client = new Client()) => {
 
             switch (command) {
                 /* #region Informasi commands */
-                case 'resi':
-                case 'cekresi': {
-                    if (args.length != 2) return reply(`Maaf, format pesan salah.\nSilakan ketik pesan dengan ${prefix}resi <kurir> <no_resi>\n\nKurir yang tersedia:\njne, pos, tiki, wahana, jnt, rpx, sap, sicepat, pcp, jet, dse, first, ninja, lion, idl, rex`)
-                    const kurirs = ['jne', 'pos', 'tiki', 'wahana', 'jnt', 'rpx', 'sap', 'sicepat', 'pcp', 'jet', 'dse', 'first', 'ninja', 'lion', 'idl', 'rex']
-                    if (!kurirs.includes(args[0])) return sendText(`Maaf, jenis ekspedisi pengiriman tidak didukung layanan ini hanya mendukung ekspedisi pengiriman ${kurirs.join(', ')} Tolong periksa kembali.`)
-                    console.log(color('[LOGS]', 'grey'), 'Memeriksa No Resi', args[1], 'dengan ekspedisi', args[0])
-                    cekResi(args[0], args[1]).then((result) => sendText(result))
-                    break
-                }
-
-                case 'cekcovid': {
+                case 'checkcovid': {
                     let { data } = await get('https://data.covid19india.org/v4/min/timeseries.min.json', { httpsAgent: httpsAgent })
                     if (!isQuotedLocation) return reply(`Ara Ara, the format of the message is wrong.\nSend your location and reply with the caption ${prefix}cekcovid\n\n` +
                         `Covid status in India\n` +
@@ -1914,7 +1907,7 @@ const HandleMsg = async (message, browser, client = new Client()) => {
                     let datax = ''
                     zoneStatus.data.forEach((z, i) => {
                         const { zone, region } = z
-                        const _zone = zone == 'green' ? 'Hijau* (Aman) \n' : zone == 'yellow' ? 'Kuning* (Waspada) \n' : 'Merah* (Bahaya) \n'
+                        const _zone = zone == 'green' ? 'Green* (Safe) \n' : zone == 'yellow' ? 'Yellow* (Warning) \n' : 'Red* (Danger) \n'
                         datax += `${i + 1}. Kel. *${region}* Berstatus *Zona ${_zone}`
                     })
                     const text = `*CHECK THE LOCATION OF THE SPREAD OF COVID-19*\nThe check result from the location you sent is *${zoneStatus.status}* ${zoneStatus.optional}\n\nInformation on affected locations around you:\n${datax}`
@@ -1922,35 +1915,12 @@ const HandleMsg = async (message, browser, client = new Client()) => {
                     break
                 }
 
-                case 'crjogja': {
-                    sendText(resMsg.wait)
-                    let path = './media/crjogja.png'
-                    scraper.ssweb(browser, path, 'https://sipora.staklimyogyakarta.com/radar/', { width: 600, height: 600 })
-                        .catch(e => { return printError(e) })
-                    await client.sendFile(from, path, '', 'Captured from https://sipora.staklimyogyakarta.com/radar/', id)
-                        .then(() => {
-                            client.simulateTyping(from, false)
-                        })
-                        .catch(() => {
-                            reply('Ada yang error! Coba lagi beberapa saat kemudian. Mending cek sendiri aja ke\nhttps://sipora.staklimyogyakarta.com/radar/')
-                        })
-                    break
-                }
-
-                case 'cuaca': {
-                    if (args.length == 0) return reply(`Untuk melihat cuaca pada suatu daerah\nketik: ${prefix}cuaca [daerah]`)
-                    const cuaca = await api.cuaca(arg)
-                    await reply(cuaca)
-                        .catch(e => { return printError(e) })
-                    break
-                }
-
                 case 'buildgi': {
                     // data json dari scnya Niskata (https://github.com/Niskata/bot-whatsapp/blob/c5a2c01e7a0ce7cd846e07c1e28c10daf912aaa0/HandleMsg.js#L1024) :D
-                    if (args.length == 0) return reply(`To see Genshin Impact character builds. ${prefix}buildgi nama.\nContoh: ${prefix}buildgi jean`)
+                    if (args.length == 0) return reply(`To see Genshin Impact character builds. ${prefix}buildgi name.\nContoh: ${prefix}buildgi jean`)
                     const genshinBuild = JSON.parse(readFileSync('./src/json/genshinbuild.json'))
                     const getBuild = lodash.find(genshinBuild, { name: args[0] })?.build
-                    if (getBuild === undefined) return reply(`Character tidak ditemukan`)
+                    if (getBuild === undefined) return reply(`Character not found`)
                     sendFFU(getBuild)
                     break
                 }
@@ -1982,8 +1952,8 @@ const HandleMsg = async (message, browser, client = new Client()) => {
                     break
                 }
 
-                case 'tbg':
-                case 'tebakgambar': {
+                case 'gp':
+                case 'guesspic': {
                     const isRoomExist = await tebak.isRoomExist(from)
                     if (isRoomExist) return reply(`The Guess Session is in progress. ${prefix}skip to skip session`)
                     await tebak.getTebakGambar(from).then(async res => {
@@ -1997,8 +1967,8 @@ const HandleMsg = async (message, browser, client = new Client()) => {
                     break
                 }
 
-                case 'tbk':
-                case 'tebakkata': {
+                case 'gss':
+                case 'guess': {
                     const isRoomExist = await tebak.isRoomExist(from)
                     if (isRoomExist) return reply(`The Guess Session is in progress. ${prefix}skip to skip session.`)
                     await tebak.getTebakKata(from).then(async res => {
@@ -2013,101 +1983,19 @@ const HandleMsg = async (message, browser, client = new Client()) => {
                     break
                 }
 
-                case 'tbl':
-                case 'tebaklirik': {
-                    if (!isLolApiActive) return sendText(`❌ Sorry this feature is not active!`)
-                    const isRoomExist = await tebak.isRoomExist(from)
-                    if (isRoomExist) return reply(`Sesi Tebak sedang berlangsung. ${prefix}skip untuk skip sesi.`)
-                    await tebak.getTebakLirik(from).then(async res => {
-                        let detik = 100
-                        await reply(`Tebak Lirik. Lengkapi lirik yang sesuai.\nJawab dengan *membalas pesan ini*.\n\n` +
-                            `${q3 + res.question + q3}\n\n` +
-                            `Jumlah huruf: ${res.answer.length}\nWaktunya ${detik} detik.\n*${prefix}skip* untuk skip`)
-                            .then(() => {
-                                startTebakRoomTimer(detik, res.answer)
-                            })
-                    }).catch(e => { return printError(e) })
-                    break
-                }
-
-                case 'tbj':
-                case 'tebakjenaka': {
-                    if (!isLolApiActive) return sendText(`❌ Maaf fitur sedang tidak aktif!`)
-                    const isRoomExist = await tebak.isRoomExist(from)
-                    if (isRoomExist) return reply(`Sesi Tebak sedang berlangsung. ${prefix}skip untuk skip sesi.`)
-                    await tebak.getTebakJenaka(from).then(async res => {
-                        let detik = 100
-                        await reply(`Tebakan Jenaka.\nJawab dengan *membalas pesan ini*.\n\n` +
-                            `${q3 + res.question + q3}\n\n` +
-                            `Jumlah kata: ${res.answer.split(/\s/ig).length}\n` +
-                            `Jumlah huruf: ${res.answer.length}\n` +
-                            `Waktunya ${detik} detik.\n*${prefix}skip* untuk skip`)
-                            .then(() => {
-                                startTebakRoomTimer(detik, res.answer)
-                            })
-                    }).catch(e => { return printError(e) })
-                    break
-                }
-
                 // TODO add more tebak
 
                 // Skip room
                 case 'skip': {
                     tebak.getAns(from).then(res => {
-                        if (!res) reply(`⛔ Tidak ada sesi Tebak berlangsung.`)
+                        if (!res) reply(`⛔ There is no Guess session taking place.`)
                         else {
-                            reply(`⏭ Sesi Tebak telah diskip!\nJawabannya: *${res.ans}*`)
+                            reply(`⏭ The Guessing Session has been skipped!\nAnswer is: *${res.ans}*`)
                             tebak.delRoom(from)
                         }
                     })
                     break
                 }
-
-                case 'skripsi': {
-                    let skripsis = readFileSync('./src/txt/skripsi.txt', 'utf8')
-                    let _skrps = sample(skripsis.split('\n'))
-                    let gtts = new gTTS(_skrps, 'id')
-                    try {
-                        gtts.save('./media/tts.mp3', function () {
-                            client.sendPtt(from, './media/tts.mp3')
-                                .catch(err => {
-                                    console.log(err)
-                                    sendText(resMsg.error.norm)
-                                })
-                        })
-                    } catch (err) { printError(err) }
-                    break
-                }
-
-                case 'apakah': {
-                    let x = Crypto.randomInt(0, 10)
-                    let result = ''
-                    if (args.length === 0) result = 'Apakah apa woy yang jelas dong! Misalnya, apakah aku ganteng?'
-                    else {
-                        if (x >= 0 && x <= 3) result = 'Iya'
-                        else if (x >= 4 && x <= 7) result = 'Tidak'
-                        else result = 'Coba tanya lagi'
-                    }
-                    var gtts = new gTTS(result, 'id')
-                    try {
-                        gtts.save('./media/tts.mp3', function () {
-                            client.sendPtt(from, './media/tts.mp3', id)
-                                .catch(err => {
-                                    console.log(err)
-                                    sendText(resMsg.error.norm)
-                                })
-                        })
-                    } catch (err) { printError(err) }
-                    break
-                }
-
-                case 'whatanime': {
-                    sendText(`Fitur broken. Kesini aja https://trace.moe`)
-                    break
-                }
-
-                /* #endregion Hiburan */
-            }
 
             switch (command) {
                 /* #region List Creator Commands */
@@ -2728,8 +2616,8 @@ const HandleMsg = async (message, browser, client = new Client()) => {
             switch (command) {
                 /* #region Other commands */
                 case 'del':
-                    if (!quotedMsg) return reply(`Maaf, format pesan salah Silakan.\nReply pesan bot dengan caption ${prefix}del`)
-                    if (!quotedMsgObj.fromMe) return reply(`Maaf, format pesan salah Silakan.\nReply pesan bot dengan caption ${prefix}del`)
+                    if (!quotedMsg) return reply(`Ara Ara, wrong message format Please.Reply to the bot message with caption ${prefix}del`)
+                    if (!quotedMsgObj.fromMe) return reply(`Ara Ara, wrong message format Please.Reply to the bot message with caption  ${prefix}del`)
                     client.simulateTyping(from, false)
                     await client.deleteMessage(from, quotedMsg.id, false).catch(e => printError(e, false))
                     break
@@ -2739,12 +2627,12 @@ const HandleMsg = async (message, browser, client = new Client()) => {
                     sfx.forEach(n => {
                         listMsg = listMsg + '\n -> ' + n
                     })
-                    if (args.length === 0) return reply(`Mengirim SFX atau VN yg tersedia: caranya langung ketik nama sfx ${listMsg}`)
+                    if (args.length === 0) return reply(`Send available SFX or VN: how to directly type in the name sfx ${listMsg}`)
                     break
                 }
                 case 'reminder':
                 case 'remind': {
-                    if (args.length === 0 && quotedMsg === null) return reply(`Kirim pesan pada waktu tertentu.\n*${prefix}remind <xdxhxm> <Text atau isinya>*\nIsi x dengan angka. Misal 1d1h1m = 1 hari lebih 1 jam lebih 1 menit\nContoh: ${prefix}remind 1h5m Jangan Lupa minum!\nBot akan kirim ulang pesan 'Jangan Lupa minum!' setelah 1 jam 5 menit.\n\n*${prefix}remind <DD/MM-hh:mm> <Text atau isinya>* utk tgl dan waktu spesifik\n*${prefix}remind <hh:mm> <Text atau isinya>* utk waktu pd hari ini\nContoh: ${prefix}remind 15/04-12:00 Jangan Lupa minum!\nBot akan kirim ulang pesan 'Jangan Lupa minum!' pada tanggal 15/04 jam 12:00 tahun sekarang. \n\nNote: waktu dalam GMT+7/WIB`)
+                    if (args.length === 0 && quotedMsg === null) return reply(`Send a message at a specific time.\n*${prefix}remind <xdxhxm> <Text or content>*\nFill x with numbers. For example 1d1h1m = 1 day over 1 hour over 1 minuteExample: ${prefix}remind 1h5m Don't Forget to watch anime!\nThe bot will resend the message'Don't Forget to watch anime!' after 1 hour 5 minutes.\n\n*${prefix}remind <DD/MM-hh:mm> <Text or content>*for a specific date and time\n*${prefix}remind <hh:mm> <Text or content>* for today's time\nExample: ${prefix}remind 15/04-12:00 Don't forget to watch anime!\nThe bot will resend the message 'Don't forget to watch anime!' on 15/04 at 12:00 this year. \n\nNote: deep year GMT+7/WIB`)
                     const dd = args[0].match(/\d+(d|D)/g)
                     const hh = args[0].match(/\d+(h|H)/g)
                     const mm = args[0].match(/\d+(m|M)/g)
@@ -2753,7 +2641,7 @@ const HandleMsg = async (message, browser, client = new Client()) => {
 
                     let milis = 0
                     if (dd === null && hh === null && mm === null && hhmm === null) {
-                        return reply(`Format salah! masukkan waktu`)
+                        return reply(`Incorrect format! enter the time`)
                     } else if (hhmm === null) {
                         let d = dd != null ? dd[0].replace(/d|D/g, '') : 0
                         let h = hh != null ? hh[0].replace(/h|H/g, '') : 0
@@ -2765,12 +2653,12 @@ const HandleMsg = async (message, browser, client = new Client()) => {
                         let MM = DDMM[0].replace(/\d\d?\//g, '')
                         milis = Date.parse(`${moment(t * 1000).format('YYYY')}-${MM}-${DD} ${hhmm[0]}:00 GMT+7`) - moment(t * 1000)
                     }
-                    if (milis < 0) return reply(`Reminder untuk masa lalu? Hmm menarik...\n\nYa gabisa lah`)
-                    if (milis >= 864000000) return reply(`Kelamaan cuy, maksimal 10 hari kedepan`)
+                    if (milis < 0) return reply(`A reminder of the past? Hmm interesting...\n\nYes, you can`)
+                    if (milis >= 864000000) return reply(`Future time, a maximum of 10 days in the future`)
 
                     let content = arg.trim().substring(arg.indexOf(' ') + 1)
-                    if (content === '') return reply(`Format salah! Isi pesannya apa?`)
-                    if (milis === null) return reply(`Maaf ada yang error!`)
+                    if (content === '') return reply(`Incorrect format! What is the content of the message??`)
+                    if (milis === null) return reply(`Sorry there is an error!`)
                     await schedule.futureMilis(client, message, content, milis, (quotedMsg != null)).catch(e => console.log(e))
                     await reply(`Reminder for ${moment((t * 1000) + milis).format('DD/MM/YY HH:mm:ss')} sets!`)
                     break
@@ -3158,10 +3046,10 @@ const HandleMsg = async (message, browser, client = new Client()) => {
             tebak.getAns(from).then(res => {
                 if (res && quotedMsg?.fromMe) {
                     if (res.ans?.toLowerCase() === chats?.toLowerCase()) {
-                        reply(`✅ Jawaban benar! : *${res.ans}*`)
+                        reply(`✅ Correct Answer! : *${res.ans}*`)
                         tebak.delRoom(from)
                     } else {
-                        reply(`❌ Salah!`)
+                        reply(`❌ Wrong!`)
                     }
                 }
             })
@@ -3172,12 +3060,12 @@ const HandleMsg = async (message, browser, client = new Client()) => {
             if (['video', 'image'].includes(type) && caption) msg = caption
             else msg = message.body
             if (msg?.match(/chat\.whatsapp\.com/gi) !== null) {
-                if (!isBotGroupAdmin) return sendText('Gagal melakukan kick, bot bukan admin')
+                if (!isBotGroupAdmin) return sendText('Failed to kick, bot is not admin')
                 if (isGroupAdmin) {
                     reply(`Duh admin yang share link group. Gabisa dikick deh.`)
                 } else {
                     console.log(color('[LOGS]', 'grey'), `Group link detected, kicking sender from ${name || formattedTitle}`)
-                    reply(`‼️〘 ANTI LINK GROUP 〙‼️\nMohon maaf. Link group whatsapp terdeteksi! Auto kick...`)
+                    reply(`‼️〘 ANTI LINK GROUP 〙‼️\nApologize. Whatsapp group link detected! Auto kick...`)
                     setTimeout(async () => {
                         await client.removeParticipant(groupId, pengirim)
                     }, 2000)
@@ -3191,12 +3079,12 @@ const HandleMsg = async (message, browser, client = new Client()) => {
             if (['video', 'image'].includes(type) && caption) msg = caption
             else msg = message.body
             if (msg?.match(/[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/gi) !== null) {
-                if (!isBotGroupAdmin) return sendText('Gagal melakukan kick, bot bukan admin')
+                if (!isBotGroupAdmin) return sendText('Failed to kick, bot is not admin')
                 if (isGroupAdmin) {
                     reply(`Duh admin yang share link. Gabisa dikick deh.`)
                 } else {
                     console.log(color('[LOGS]', 'grey'), `Any link detected, kicking sender from ${name || formattedTitle}`)
-                    reply(`‼️〘 ANTI LINK 〙‼️\nMohon maaf. Link terdeteksi! Auto kick...`)
+                    reply(`‼️〘 ANTI LINK 〙‼️\nApologize. Link detected! Auto kick...`)
                     setTimeout(async () => {
                         await client.removeParticipant(groupId, pengirim)
                     }, 2000)
